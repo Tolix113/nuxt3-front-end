@@ -25,7 +25,7 @@
   }
 
   async function addProduct() {
-      const createdProduct = await $fetch("/api/products/create", {
+    const createdProduct = await $fetch("/api/products/create", {
       method: 'POST',
       body: {
       title: 'test_title',
@@ -34,8 +34,8 @@
       thumbnail: 'https://cdn.dummyjson.com/product-images/1/thumbnail.jpg',
     }
   })
-  console.log(createdProduct.message);
-  products.value = createdProduct.data;
+    console.log(createdProduct.message);
+    products.value = createdProduct.data;
   }
   
   onMounted(getProducts);
