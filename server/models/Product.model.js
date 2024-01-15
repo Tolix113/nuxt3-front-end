@@ -1,4 +1,5 @@
 import { defineMongooseModel } from '#nuxt/mongoose'
+import validator from 'validator'
 
 export const Product = defineMongooseModel({
     name: 'Product',
@@ -43,15 +44,16 @@ export const Product = defineMongooseModel({
             type: String,
             validate: {
                 validator: (value) => {
-                    validator.isURL(value, { protocols: ['http','https','ftp'], require_tld: true, require_protocol: true })
+                    return validator.isURL(value, { protocols: ['http','https','ftp'], require_tld: true, require_protocol: true })
                 },
             }
         },
         images: {
             type: Array,
+            default: undefined,
             validate: {
                 validator: (arr) => arr.every((value) => {
-                    validator.isURL(value, { protocols: ['http','https','ftp'], require_tld: true, require_protocol: true })
+                    return validator.isURL(value, { protocols: ['http','https','ftp'], require_tld: true, require_protocol: true })
                 })
             }
         },

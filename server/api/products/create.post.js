@@ -4,10 +4,12 @@ export default defineEventHandler(async (event) => {
     try {
         const body = await readBody(event);
         await ProductModel.create(body);
-        return { message: 'Product created!' }
+        const products = await ProductModel.find();
+        return { message: 'Product created!', data: products }
     } catch(error) {
         throw createError({
-            message: error.message
+            statusCode: 500,
+            statusMessage: error.message,
         })
     }
 })
