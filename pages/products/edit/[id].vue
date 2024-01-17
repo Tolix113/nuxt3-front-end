@@ -57,7 +57,7 @@
       if (!description.value) return description.value = 'Необходимо ввести описание';
 
       await $fetch(`/api/products/edit/${productId}`, {
-        method: 'PUT',
+        method: 'PATCH',
         body: {
           title: title.value,
           description: description.value,
