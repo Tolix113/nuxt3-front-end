@@ -5,6 +5,6 @@
 </template>
 
 <script setup>
-  const route = useRoute();
-  const productId = route.params.id;
+const route = useRoute();
+const productId = route.params.id;
 </script>

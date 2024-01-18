@@ -1,5 +1,5 @@
-import ProductModel from "~/server/models/Product.model"
+import ProductModel from "~/server/models/Product.model";
 
 export default defineEventHandler(async () => {
-    return await ProductModel.find();
-})
+  return await ProductModel.find();
+});

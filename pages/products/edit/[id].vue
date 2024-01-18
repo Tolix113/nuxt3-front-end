@@ -1,92 +1,133 @@
 <template>
-    <div>
-      <h1 class="text-[24px]">{{ $route.params.id }}</h1>
-      <form @submit="updateProduct">
-        <span v-if="titleError" class="text-red-600">{{ titleError }}</span>
-        <input
-          type="text"
-          v-model="title"
-          placeholder="Введите заголовок товара"
-        >
-        <span v-if="descriptionError" class="text-red-600">{{ descriptionError }}</span>
-        <textarea
-          v-model="description"
-          placeholder="Введите описание товара"
-        >{{ description }}</textarea>
+  <div class="container mx-auto py-4 border border-red-400">
+    <h1 class="text-[24px]">ID: {{ $route.params.id }}</h1>
+    <form @submit="updateProduct">
+      <div class="grid gap-4 mb-6 grid-cols-2">
         <div>
+          <label
+            for="title"
+            class="block mb-2 text-sm font-medium"
+            >Заголовок:</label
+          >
+          <input
+            id="title"
+            type="text"
+            v-model="title"
+            placeholder="Введите заголовок товара"
+            class="input"
+          />
+          <p
+            v-if="titleError"
+            class="mt-2 text-sm font-medium text-red-600"
+          >
+            {{ titleError }}
+          </p>
+        </div>
+        <div>
+          <label
+            for="description"
+            class="block mb-2 text-sm font-medium"
+            >Описание товара:</label
+          >
+          <textarea
+            id="description"
+            v-model="description"
+            placeholder="Введите описание товара"
+            class="input"
+            >{{ description }}</textarea
+          >
+          <p
+            v-if="descriptionError"
+            class="mt-2 text-sm font-medium text-red-600"
+          >
+            {{ descriptionError }}
+          </p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <NuxtLink
             title="Вернуться"
             to="/"
-            class="w-auto text-white bg-green-600 hover:bg-green-700 font-medium rounded-full text-sm px-5 py-2.5 text-center focus:ring-4 focus:ring-green-300"
+            class="w-auto btn btn-green"
           >
             Вернуться
           </NuxtLink>
           <button
             type="submit"
-            class="w-auto text-white bg-green-600 hover:bg-green-700 font-medium rounded-full text-sm px-5 py-2.5 text-center focus:ring-4 focus:ring-green-300"
+            class="w-auto btn btn-green"
           >
             Редактировать
           </button>
-          <button 
+          <button
             @click="deleteProduct()"
             type="button"
-            class="w-auto text-white bg-green-600 hover:bg-green-700 font-medium rounded-full text-sm px-5 py-2.5 text-center focus:ring-4 focus:ring-green-300"
+            class="w-auto btn btn-green"
           >
             Удалить
           </button>
         </div>
-      </form>
-    </div>
+      </div>
+    </form>
+  </div>
 </template>
 
 <script setup>
-    const route = useRoute();
-    const router = useRouter();
+const route = useRoute();
+const router = useRouter();
 
-    const productId = route.params.id;
-    const { data: product, pending } = await useLazyFetch(`/api/products/${productId}`);
-    
-    const title = ref('');
-    const description = ref('');
-    const titleError = ref('');
-    const descriptionError = ref('');
+const productId = route.params.id;
+const { data: product, pending } = await useLazyFetch(
+  `/api/products/${productId}`
+);
 
-    watch(pending, () => {
-      title.value = String(product.value?.title ?? 'Загрузка...');
-      description.value = String(product.value?.description ?? 'Загрузка...');
-    }, { deep: true, immediate: true });
+const title = ref("");
+const description = ref("");
+const titleError = ref("");
+const descriptionError = ref("");
 
-    const updateProduct = async(event) => {
-      event.preventDefault();
-      
-      //Обработка ошибок
-      if (!title.value) return title.value = 'Необходимо ввести заголовок';
-      if (!description.value) return description.value = 'Необходимо ввести описание';
+watch(
+  pending,
+  () => {
+    title.value = String(product.value?.title ?? "Загрузка...");
+    description.value = String(product.value?.description ?? "Загрузка...");
+  },
+  { deep: true, immediate: true }
+);
 
-      await $fetch(`/api/products/edit/${productId}`, {
-        method: 'PATCH',
-        body: {
-          title: title.value,
-          description: description.value,
-        }
-      })
-      
-      router.back();
-    }
+const updateProduct = async (event) => {
+  event.preventDefault();
 
-    const deleteProduct = async(event) => {
-      if (confirm('Вы действительно хотите удалить этот продукт?')) {
-        await $fetch(`/api/products/delete/${productId}`, {
-          method: 'DELETE',
-        });
+  //Обработка ошибок
+  console.log(`Title: ${!!title.value}`);
+  if (!title.value.trim())
+    return (titleError.value = "Необходимо ввести заголовок товара");
+  console.log(`Description: ${!!description.value}`);
+  if (!description.value.trim())
+    return (descriptionError.value = "Необходимо ввести описание товара");
 
-        router.back();
-      }
+  await $fetch(`/api/products/edit/${productId}`, {
+    method: "PATCH",
+    body: {
+      title: title.value,
+      description: description.value,
+    },
+  });
 
-      return;
-    }
+  router.back();
+};
 
-    useHead({
-      title: `Редактирование ${title.value}`,
-    })
+const deleteProduct = async (event) => {
+  if (confirm("Вы действительно хотите удалить этот продукт?")) {
+    await $fetch(`/api/products/delete/${productId}`, {
+      method: "DELETE",
+    });
+
+    router.back();
+  }
+
+  return;
+};
+
+useHead({
+  title: `Редактирование ${title.value}`,
+});
 </script>
