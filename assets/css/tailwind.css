@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .btn {
-  @apply font-medium py-2.5 px-5 text-center rounded-full block;
+  @apply font-medium py-2.5 px-5 text-center rounded-lg block;
 }
 
 .btn-green {
@@ -15,13 +15,13 @@
 }
 
 .btn-green:focus {
-  @apply ring-4 ring-green-300;
+  @apply ring-4 ring-green-300 outline-none;
 }
 
 .input {
-  @apply font-medium border border-gray-300 rounded-lg w-full p-2.5;
+  @apply font-medium border bg-gray-100 border-gray-300 rounded-lg w-full p-2.5;
 }
 
 .input:focus {
-  @apply ring-4 ring-green-600;
+  @apply ring-2 ring-green-600 outline-none;
 }
