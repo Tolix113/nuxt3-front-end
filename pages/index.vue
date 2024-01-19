@@ -1,8 +1,18 @@
 <template>
-  <div>
+  <nav class="mx-auto bg-green-100">
     <ul>
-      <li><NuxtLink to="/products">Products</NuxtLink></li>
-      <li><NuxtLink to="/about">About</NuxtLink></li>
+      <div class="flex flex-wrap items-center gap-x-2 p-4">
+        <li
+          class="py-2 px-4 rounded-lg border hover:bg-green-300 hover:ring-2 hover:ring-green-500"
+        >
+          <NuxtLink to="/products">Products</NuxtLink>
+        </li>
+        <li
+          class="py-2 px-4 rounded-lg border hover:bg-green-300 hover:ring-2 hover:ring-green-500"
+        >
+          <NuxtLink to="/about">About</NuxtLink>
+        </li>
+      </div>
     </ul>
-  </div>
+  </nav>
 </template>

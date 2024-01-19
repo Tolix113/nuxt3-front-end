@@ -123,13 +123,6 @@
           </p>
         </div>
         <div class="grid m-2 grid-cols-1 md:grid-cols-2 gap-4">
-          <NuxtLink
-            title="Вернуться"
-            to="/"
-            class="w-auto btn btn-green"
-          >
-            Вернуться
-          </NuxtLink>
           <button
             type="submit"
             class="w-auto btn btn-green"

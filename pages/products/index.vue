@@ -1,30 +1,36 @@
 <template>
-  <main class="max-w-screen-lg mx-auto">
-    <div class="flex flex-wrap justify-center gap-2 mt-4">
-      <div
-        v-for="product in products"
-        class="flex flex-col rounded-lg h-full max-w-xs border-solid border-green-500 border-2"
-      >
+  <main class="max-w-screen-lg mx-auto flex flex-col">
+    <!-- product card -->
+    <div
+      v-for="product in products"
+      class="flex flex-col md:flex-row overflow-hidden rounded-lg border shadow-xl mt-4 w-100 mx-2"
+    >
+      <!-- thumbnail -->
+      <div class="h-32 w-auto md:w1/2">
         <a :href="`/products/edit/${product._id}`">
           <img
             :src="product.thumbnail"
-            class="max-w-full"
+            class="inset-0 h-full w-full object-cover object-center"
           />
         </a>
-        <div class="flex flex-col justify-between flex-grow">
-          <h2 class="leading-relaxed text-base break-words">
-            {{ product.title }}
-          </h2>
-        </div>
+      </div>
+      <!-- content -->
+      <div class="w-full py-4 px-6 flex flex-col justify-between">
+        <h3>{{ product.title }}</h3>
+        <p>Бренд товара: {{ product.brand }}</p>
+        <p class="text-justify">Рейтинг товара: {{ product.rating }}</p>
+      </div>
+      <div class="w-32 py-4 px-6 flex flex-row items-center">
+        <h2 class="text-lg">{{ product.price }} ₽</h2>
       </div>
     </div>
   </main>
-  <button
+  <!-- <button
     @click="addProduct"
     class="btn btn-green"
   >
     Добавить
-  </button>
+  </button> -->
 </template>
 
 <script setup>

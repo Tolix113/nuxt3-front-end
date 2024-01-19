@@ -7,7 +7,7 @@
 }
 
 .btn-green {
-  @apply bg-green-600 text-white;
+  @apply bg-green-600 text-white shadow-md;
 }
 
 .btn-green:hover {
@@ -19,7 +19,7 @@
 }
 
 .input {
-  @apply font-medium border bg-gray-100 border-gray-300 rounded-lg w-full p-2.5;
+  @apply font-medium border bg-gray-100 border-gray-300 rounded-lg w-full p-2.5 shadow-md;
 }
 
 .input:focus {
