@@ -197,10 +197,10 @@ const updateProduct = async (event) => {
       price: price.value,
       category: category.value,
       brand: brand.value,
-      thumbnail: thumbnail.value,
-      images: images.value,
     },
   });
+
+  //Доделать обновление изображений (formData)
 
   router.back();
 };

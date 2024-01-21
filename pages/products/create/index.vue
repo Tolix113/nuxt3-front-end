@@ -173,7 +173,7 @@ async function getFiles(event) {
 }
 
 async function uploadImages(productId) {
-  if (!thumbnail.value || !images.value) {
+  if (!thumbnail.value && !images.value) {
     return;
   }
 

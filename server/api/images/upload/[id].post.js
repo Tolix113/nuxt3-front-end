@@ -5,13 +5,13 @@ import fsLiteDriver from "unstorage/drivers/fs-lite";
 export default defineEventHandler(async (event) => {
   const productId = getRouterParam(event, "id");
   const pathForImages = `/images/${productId}`;
-  const savePathForImages = `./public/${pathForImages}`;
+  const pathForStorage = `./public/${pathForImages}`;
   const storage = createStorage({
-    driver: fsLiteDriver({ base: savePathForImages }),
+    driver: fsLiteDriver({ base: pathForStorage }),
   });
 
   const body = await readMultipartFormData(event);
-  const imagesPaths = [];
+  const imagePaths = [];
   let thumbnailPath = "";
   let i = 1;
 
@@ -28,7 +28,7 @@ export default defineEventHandler(async (event) => {
       i++;
     }
 
-    imagesPaths.push(`${pathForImages}/${fileName}`);
+    imagePaths.push(`${pathForImages}/${fileName}`);
     await storage.setItemRaw(`${fileName}`, image.data);
   }
 
@@ -36,7 +36,7 @@ export default defineEventHandler(async (event) => {
     method: "PATCH",
     body: {
       thumbnail: thumbnailPath,
-      images: imagesPaths,
+      images: imagePaths,
     },
   });
 
