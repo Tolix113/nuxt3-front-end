@@ -1,13 +1,11 @@
 <template>
   <main class="min-h-screen">
     <div class="max-w-5xl mx-auto py-4">
-      <h1 class="text-2xl font-medium m-2">
-        Редактирование товара: {{ product.title }}
-      </h1>
-      <form @submit="updateProduct">
+      <h1 class="text-2xl font-medium m-2">Создание товара</h1>
+      <form @submit="createProduct">
         <div class="grid grid-cols-1 m-2">
           <img
-            :src="product.thumbnail"
+            :src="thumbnail"
             class="rounded-lg max-h-64"
           />
         </div>
@@ -21,7 +19,7 @@
             <input
               id="thumbnail"
               type="file"
-              ref="thumbnail"
+              @change="getFile($event)"
               class="block w-full text-sm font-medium bg-gray-100 border border-gray-300 cursor-pointer file:cursor-pointer file:text-white file:border-0 file:py-2.5 file:px-5 file:bg-green-600 rounded-lg"
             />
           </div>
@@ -34,7 +32,7 @@
             <input
               id="images"
               type="file"
-              ref="images"
+              @change="getFiles($event)"
               class="block w-full text-sm font-medium bg-gray-100 border border-gray-300 cursor-pointer file:cursor-pointer file:text-white file:border-0 file:py-2.5 file:px-5 file:bg-green-600 rounded-lg"
               multiple
             />
@@ -72,6 +70,20 @@
               v-model="price"
               class="input"
               placeholder="Введите стоимость товара"
+            />
+          </div>
+          <div>
+            <label
+              for="discountPercentage"
+              class="block mb-2 text-sm font-medium"
+              >Скидка на товар:
+            </label>
+            <input
+              id="discountPercentage"
+              type="number"
+              v-model="discountPercentage"
+              class="input"
+              placeholder="Введите скидку на товар"
             />
           </div>
           <div>
@@ -127,16 +139,9 @@
         <div class="grid m-2 grid-cols-1 md:grid-cols-2 gap-4">
           <button
             type="submit"
-            class="w-auto btn btn-green"
+            class="btn btn-green"
           >
-            Редактировать
-          </button>
-          <button
-            @click="deleteProduct()"
-            type="button"
-            class="w-auto btn btn-green"
-          >
-            Удалить
+            Добавить
           </button>
         </div>
       </form>
@@ -145,79 +150,61 @@
 </template>
 
 <script setup>
-const route = useRoute();
-const router = useRouter();
-
-const productId = route.params.id;
-const { data: product, pending } = await useLazyFetch(
-  `/api/products/${productId}`
-);
-
 const title = ref("");
 const description = ref("");
 const thumbnail = ref("");
 const images = ref([]);
-const price = ref("");
+const price = ref(0);
+const discountPercentage = ref(0);
 const category = ref("");
 const brand = ref("");
 
 const titleError = ref("");
 const descriptionError = ref("");
 
-watch(
-  pending,
-  () => {
-    title.value = String(product.value?.title ?? "Загрузка...");
-    description.value = String(product.value?.description ?? "Загрузка...");
-    thumbnail.value = product.value?.thumbnail ?? "Загрузка...";
-    images.value = product.value?.images ?? "Загрузка...";
-    price.value = Number(product.value?.price ?? "Загрузка...");
-    category.value = String(product.value?.category ?? "Загрузка...");
-    brand.value = String(product.value?.brand ?? "Загрузка...");
-  },
-  { deep: true, immediate: true }
-);
+async function getFile(event) {
+  const _file = event.target.files[0];
+  thumbnail.value = await _file;
+}
 
-const updateProduct = async (event) => {
+async function getFiles(event) {
+  const _files = event.target.files;
+  images.value = await _files;
+}
+
+async function uploadImages(productId) {
+  if (!thumbnail.value || !images.value) {
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("thumbnail", thumbnail.value, thumbnail.value.name);
+
+  for (const image of images.value) {
+    formData.append("images", image, image.name);
+  }
+
+  await $fetch(`/api/images/upload/${productId}`, {
+    method: "POST",
+    body: formData,
+  });
+}
+
+async function createProduct(event) {
   event.preventDefault();
 
-  //Обработка ошибок
-  console.log(`Title: ${!!title.value}`);
-  if (!title.value.trim())
-    return (titleError.value = "Необходимо ввести заголовок товара");
-  console.log(`Description: ${!!description.value}`);
-  if (!description.value.trim())
-    return (descriptionError.value = "Необходимо ввести описание товара");
-
-  await $fetch(`/api/products/edit/${productId}`, {
-    method: "PATCH",
+  const createdProduct = await $fetch("/api/products/create", {
+    method: "POST",
     body: {
       title: title.value,
       description: description.value,
       price: price.value,
+      discountPercentage: discountPercentage.value,
       category: category.value,
       brand: brand.value,
-      thumbnail: thumbnail.value,
-      images: images.value,
     },
   });
 
-  router.back();
-};
-
-const deleteProduct = async (event) => {
-  if (confirm("Вы действительно хотите удалить этот продукт?")) {
-    await $fetch(`/api/products/delete/${productId}`, {
-      method: "DELETE",
-    });
-
-    router.back();
-  }
-
-  return;
-};
-
-useHead({
-  title: `Редактирование ${title.value}`,
-});
+  uploadImages(createdProduct._id);
+}
 </script>

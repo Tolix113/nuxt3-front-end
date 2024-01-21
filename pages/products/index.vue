@@ -6,7 +6,7 @@
       class="flex flex-col md:flex-row overflow-hidden rounded-lg border shadow-xl mt-4 w-100 mx-2"
     >
       <!-- thumbnail -->
-      <div class="h-32 w-auto md:w1/2">
+      <div class="h-64 md:h-32 w-auto md:w-1/2">
         <a :href="`/products/edit/${product._id}`">
           <img
             :src="product.thumbnail"
@@ -16,21 +16,17 @@
       </div>
       <!-- content -->
       <div class="w-full py-4 px-6 flex flex-col justify-between">
-        <h3>{{ product.title }}</h3>
+        <h3 class="font-semibold text-lg leading-tight truncate">
+          {{ product.title }}
+        </h3>
         <p>Бренд товара: {{ product.brand }}</p>
-        <p class="text-justify">Рейтинг товара: {{ product.rating }}</p>
+        <p>Рейтинг товара: {{ product.rating }}</p>
       </div>
-      <div class="w-32 py-4 px-6 flex flex-row items-center">
-        <h2 class="text-lg">{{ product.price }} ₽</h2>
+      <div class="w-64 py-4 px-6 flex flex-row items-center justify-center">
+        <h2 class="font-bold text-lg">{{ product.price }} ₽</h2>
       </div>
     </div>
   </main>
-  <!-- <button
-    @click="addProduct"
-    class="btn btn-green"
-  >
-    Добавить
-  </button> -->
 </template>
 
 <script setup>
@@ -40,20 +36,6 @@ async function getProducts() {
   const fetchedProducts = await $fetch("/api/products");
   console.log(fetchedProducts);
   products.value = fetchedProducts || [];
-}
-
-async function addProduct() {
-  const createdProduct = await $fetch("/api/products/create", {
-    method: "POST",
-    body: {
-      title: "test_title",
-      description: "test_description",
-      price: 777,
-      thumbnail: "https://cdn.dummyjson.com/product-images/1/thumbnail.jpg",
-    },
-  });
-  console.log(createdProduct.message);
-  products.value = createdProduct.data;
 }
 
 onMounted(getProducts);
