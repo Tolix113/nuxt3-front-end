@@ -1,11 +1,15 @@
 <template>
+  <PageHeader />
   <main class="min-h-screen">
     <div class="max-w-5xl mx-auto py-4">
       <h1 class="text-2xl font-medium m-2">
         Редактирование товара: {{ product.title }}
       </h1>
       <form @submit="updateProduct">
-        <div class="grid grid-cols-1 m-2">
+        <div
+          v-if="product.thumbnail"
+          class="grid grid-cols-1 m-2"
+        >
           <img
             :src="product.thumbnail"
             class="rounded-lg max-h-64"
@@ -22,6 +26,8 @@
               id="thumbnail"
               type="file"
               ref="thumbnail"
+              @change="getFile($event)"
+              accept="image/*"
               class="block w-full text-sm font-medium bg-gray-100 border border-gray-300 cursor-pointer file:cursor-pointer file:text-white file:border-0 file:py-2.5 file:px-5 file:bg-green-600 rounded-lg"
             />
           </div>
@@ -35,6 +41,8 @@
               id="images"
               type="file"
               ref="images"
+              @change="getFiles($event)"
+              accept="image/"
               class="block w-full text-sm font-medium bg-gray-100 border border-gray-300 cursor-pointer file:cursor-pointer file:text-white file:border-0 file:py-2.5 file:px-5 file:bg-green-600 rounded-lg"
               multiple
             />
@@ -72,6 +80,21 @@
               v-model="price"
               class="input"
               placeholder="Введите стоимость товара"
+              required
+            />
+          </div>
+          <div>
+            <label
+              for="discountPercentage"
+              class="block mb-2 text-sm font-medium"
+              >Скидка на товар:
+            </label>
+            <input
+              id="discountPercentage"
+              type="number"
+              v-model="discountPercentage"
+              class="input"
+              placeholder="Введите скидку на товар"
             />
           </div>
           <div>
@@ -157,7 +180,10 @@ const title = ref("");
 const description = ref("");
 const thumbnail = ref("");
 const images = ref([]);
-const price = ref("");
+const thumbnailForUpload = ref("");
+const imagesForUpload = ref([]);
+const price = ref(0);
+const discountPercentage = ref(0);
 const category = ref("");
 const brand = ref("");
 
@@ -172,6 +198,9 @@ watch(
     thumbnail.value = product.value?.thumbnail ?? "Загрузка...";
     images.value = product.value?.images ?? "Загрузка...";
     price.value = Number(product.value?.price ?? "Загрузка...");
+    discountPercentage.value = Number(
+      product.value?.discountPercentage ?? "Загрузка..."
+    );
     category.value = String(product.value?.category ?? "Загрузка...");
     brand.value = String(product.value?.brand ?? "Загрузка...");
   },
@@ -182,28 +211,71 @@ const updateProduct = async (event) => {
   event.preventDefault();
 
   //Обработка ошибок
-  console.log(`Title: ${!!title.value}`);
+  // console.log(`Title: ${!!title.value}`);
   if (!title.value.trim())
     return (titleError.value = "Необходимо ввести заголовок товара");
-  console.log(`Description: ${!!description.value}`);
+  // console.log(`Description: ${!!description.value}`);
   if (!description.value.trim())
     return (descriptionError.value = "Необходимо ввести описание товара");
 
-  await $fetch(`/api/products/edit/${productId}`, {
+  const editedProduct = await $fetch(`/api/products/edit/${productId}`, {
     method: "PATCH",
     body: {
       title: title.value,
       description: description.value,
       price: price.value,
+      discountPercentage: discountPercentage.value,
       category: category.value,
       brand: brand.value,
     },
   });
 
-  //Доделать обновление изображений (formData)
+  if (editedProduct.success) {
+    console.log("Продукт успешно отредактирован...");
+    uploadImages(productId);
+    console.log("Изображения успешно обновлены...");
+  }
 
-  router.back();
+  // router.back();
 };
+
+// *** Вынести в плагин
+async function uploadImages() {
+  if (!thumbnailForUpload.value && !imagesForUpload.value) {
+    return;
+  }
+
+  const formData = new FormData();
+
+  if (thumbnailForUpload.value) {
+    formData.append(
+      "thumbnail",
+      thumbnailForUpload.value,
+      thumbnailForUpload.value.name
+    );
+  }
+
+  if (imagesForUpload.value) {
+    for (const image of imagesForUpload.value) {
+      formData.append("images", image, image.name);
+    }
+  }
+
+  await $fetch(`/api/images/upload/${productId}`, {
+    method: "POST",
+    body: formData,
+  });
+}
+
+async function getFile(event) {
+  const _file = event.target.files[0];
+  thumbnailForUpload.value = await _file;
+}
+
+async function getFiles(event) {
+  const _files = event.target.files;
+  imagesForUpload.value = await _files;
+}
 
 const deleteProduct = async (event) => {
   if (confirm("Вы действительно хотите удалить этот продукт?")) {

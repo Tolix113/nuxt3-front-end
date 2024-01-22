@@ -1,7 +1,8 @@
 <template>
+  <PageHeader />
   <main class="min-h-screen">
     <div class="max-w-5xl mx-auto py-4">
-      <h1 class="text-2xl font-medium m-2">Создание товара</h1>
+      <h1 class="text-2xl font-medium m-2">Создание продукта</h1>
       <form @submit="createProduct">
         <div class="grid grid-cols-1 m-2">
           <img
@@ -205,6 +206,8 @@ async function createProduct(event) {
     },
   });
 
-  uploadImages(createdProduct._id);
+  if (createdProduct.success) {
+    uploadImages(createdProduct.id);
+  }
 }
 </script>

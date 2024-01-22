@@ -1,8 +1,15 @@
-import ProductModel from "~/server/models/Product.model"
+import ProductModel from "~/server/models/Product.model";
 
 export default defineEventHandler(async (event) => {
-    const productId = getRouterParam(event, 'id');
+  try {
+    const productId = getRouterParam(event, "id");
     const body = await readBody(event);
     await ProductModel.findByIdAndUpdate(productId, body);
-    return await ProductModel.find();
-})
+    return { success: true };
+  } catch (error) {
+    throw createError({
+      statusCode: 500,
+      statusMessage: error.message,
+    });
+  }
+});

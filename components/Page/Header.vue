@@ -5,12 +5,12 @@
         <li
           class="py-2 px-4 rounded-lg border hover:bg-green-300 hover:ring-2 hover:ring-green-500"
         >
-          <NuxtLink to="/products">Products</NuxtLink>
+          <NuxtLink to="/products">Все продукты</NuxtLink>
         </li>
         <li
           class="py-2 px-4 rounded-lg border hover:bg-green-300 hover:ring-2 hover:ring-green-500"
         >
-          <NuxtLink to="/about">About</NuxtLink>
+          <NuxtLink to="/products/create">Добавить продукт</NuxtLink>
         </li>
       </div>
     </ul>
