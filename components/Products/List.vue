@@ -26,6 +26,20 @@
               placeholder="Поиск..."
             />
           </label>
+          <input
+            class="mt-2 placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-lg py-2 pl-5 pr-3 shadow-lg focus:outline-none sm:text-sm"
+            id="fromPrice"
+            type="number"
+            v-model="fromPrice"
+            placeholder="От 0"
+          />
+          <input
+            class="mt-2 placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-lg py-2 pl-5 pr-3 shadow-lg focus:outline-none sm:text-sm"
+            id="toPrice"
+            type="number"
+            v-model="toPrice"
+            placeholder="До 999999"
+          />
         </div>
       </div>
       <div class="flex flex-col">
@@ -63,18 +77,29 @@
 <script setup>
 const products = ref([]);
 const search = ref("");
+const fromPrice = ref("");
+const toPrice = ref("");
 
 async function getProducts() {
   const fetchedProducts = await $fetch("/api/products");
-  console.log(fetchedProducts);
-  products.value = fetchedProducts || [];
+  products.value = fetchedProducts.items || [];
+  fromPrice.value = fetchedProducts.minPrice;
+  toPrice.value = fetchedProducts.maxPrice;
 }
 
 const filteredProducts = computed(() => {
-  return products.value.filter((product) => {
-    return product.title.toLowerCase().includes(search.value.toLowerCase());
-  });
+  return products.value.filter(filteredBySearch).filter(fileteredByPrice);
 });
+
+const filteredBySearch = (item) => {
+  return item.title.toLowerCase().includes(search.value.toLowerCase());
+};
+
+const fileteredByPrice = (product) => {
+  return product.price >= fromPrice.value && product.price <= toPrice.value;
+};
+
+console.log(filteredProducts.value);
 
 onMounted(getProducts);
 </script>
