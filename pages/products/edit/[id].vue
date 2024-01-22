@@ -85,16 +85,16 @@
           </div>
           <div>
             <label
-              for="discountPercentage"
+              for="stock"
               class="block mb-2 text-sm font-medium"
-              >Скидка на товар:
+              >Остаток товаров на складе:
             </label>
             <input
-              id="discountPercentage"
+              id="stock"
               type="number"
-              v-model="discountPercentage"
+              v-model="stock"
               class="input"
-              placeholder="Введите скидку на товар"
+              placeholder="Введите остаток товаров на складе"
             />
           </div>
           <div>
@@ -183,7 +183,7 @@ const images = ref([]);
 const thumbnailForUpload = ref("");
 const imagesForUpload = ref([]);
 const price = ref(0);
-const discountPercentage = ref(0);
+const stock = ref(0);
 const category = ref("");
 const brand = ref("");
 
@@ -198,9 +198,7 @@ watch(
     thumbnail.value = product.value?.thumbnail ?? "Загрузка...";
     images.value = product.value?.images ?? "Загрузка...";
     price.value = Number(product.value?.price ?? "Загрузка...");
-    discountPercentage.value = Number(
-      product.value?.discountPercentage ?? "Загрузка..."
-    );
+    stock.value = Number(product.value?.stock ?? "Загрузка...");
     category.value = String(product.value?.category ?? "Загрузка...");
     brand.value = String(product.value?.brand ?? "Загрузка...");
   },
@@ -224,7 +222,7 @@ const updateProduct = async (event) => {
       title: title.value,
       description: description.value,
       price: price.value,
-      discountPercentage: discountPercentage.value,
+      stock: stock.value,
       category: category.value,
       brand: brand.value,
     },

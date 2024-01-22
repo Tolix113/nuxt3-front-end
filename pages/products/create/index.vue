@@ -75,16 +75,16 @@
           </div>
           <div>
             <label
-              for="discountPercentage"
+              for="stock"
               class="block mb-2 text-sm font-medium"
-              >Скидка на товар:
+              >Остаток товаров на складе:
             </label>
             <input
-              id="discountPercentage"
+              id="stock"
               type="number"
-              v-model="discountPercentage"
+              v-model="stock"
               class="input"
-              placeholder="Введите скидку на товар"
+              placeholder="Введите остаток товаров на складе"
             />
           </div>
           <div>
@@ -156,7 +156,7 @@ const description = ref("");
 const thumbnail = ref("");
 const images = ref([]);
 const price = ref(0);
-const discountPercentage = ref(0);
+const stock = ref(0);
 const category = ref("");
 const brand = ref("");
 
@@ -200,7 +200,7 @@ async function createProduct(event) {
       title: title.value,
       description: description.value,
       price: price.value,
-      discountPercentage: discountPercentage.value,
+      stock: stock.value,
       category: category.value,
       brand: brand.value,
     },
