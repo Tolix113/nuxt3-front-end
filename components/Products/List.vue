@@ -6,9 +6,9 @@
         <!-- siderbar -->
         <div class="border mt-4 rounded-lg py-2 px-2">
           <label class="relative block">
-            <button class="absolute inset-y-0 left-0 flex items-center pl-2">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-2">
               <svg
-                class="h-6 w-6 fill-slate-300 hover:fill-slate-600"
+                class="h-6 w-6 fill-slate-300"
                 viewBox="0 0 20 20"
               >
                 <path
@@ -17,7 +17,7 @@
                   clip-rule="evenodd"
                 ></path>
               </svg>
-            </button>
+            </span>
             <input
               class="placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-lg py-2 pl-9 pr-3 shadow-md focus:outline-none sm:text-sm"
               type="text"
@@ -54,10 +54,7 @@
             В наличии
           </label>
           <span class="block font-semibold">Бренды:</span>
-          <div
-            class="flex flex-col"
-            v-for="brand in brands"
-          >
+          <div v-for="brand in brands">
             <label>
               <input
                 id="brands"
@@ -67,6 +64,76 @@
               />
               {{ brand }}
             </label>
+          </div>
+          <span class="block font-semibold">Категории:</span>
+          <div v-for="category in categories">
+            <label>
+              <input
+                id="categories"
+                type="checkbox"
+                :value="category"
+                v-model="selectedCategories"
+              />
+              {{ category }}
+            </label>
+          </div>
+          <span class="block font-semibold">Рейтинг:</span>
+          <div class="flex items-center">
+            <svg
+              class="w-4 h-4 text-yellow-300 me-1"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 22 20"
+            >
+              <path
+                d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"
+              />
+            </svg>
+            <svg
+              class="w-4 h-4 text-yellow-300 me-1"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 22 20"
+            >
+              <path
+                d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"
+              />
+            </svg>
+            <svg
+              class="w-4 h-4 text-yellow-300 me-1"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 22 20"
+            >
+              <path
+                d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"
+              />
+            </svg>
+            <svg
+              class="w-4 h-4 text-yellow-300 me-1"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 22 20"
+            >
+              <path
+                d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"
+              />
+            </svg>
+            <svg
+              class="w-4 h-4 text-gray-300 me-1 dark:text-gray-500"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 22 20"
+            >
+              <path
+                d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"
+              />
+            </svg>
           </div>
         </div>
       </div>
@@ -91,7 +158,22 @@
               {{ product.title }}
             </h3>
             <p>Бренд товара: {{ product.brand }}</p>
-            <p>Рейтинг товара: {{ product.rating }}</p>
+            <div class="flex items-center">
+              <svg
+                class="w-4 h-4 text-yellow-300 me-1"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                viewBox="0 0 22 20"
+              >
+                <path
+                  d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"
+                />
+              </svg>
+              <p class="ms-2 text-sm font-bold text-gray-900 dark:text-white">
+                {{ product.rating }}
+              </p>
+            </div>
           </div>
           <div
             class="w-64 py-4 px-6 flex flex-row items-center justify-start md:justify-center"
@@ -111,6 +193,7 @@ const fromPrice = ref("");
 const toPrice = ref("");
 const inStock = ref(false);
 const selectedBrands = ref([]);
+const selectedCategories = ref([]);
 let maxPrice = 0;
 let minPrice = 0;
 
@@ -145,11 +228,18 @@ const filteredProducts = computed(() => {
     p = p.filter(filterByBrand);
   }
 
+  if (selectedCategories.value.length > 0) {
+    p = p.filter(filterByCategory);
+  }
+
   return p;
 });
 
 const filterBySearch = (item) => {
-  return item.title.toLowerCase().includes(search.value.toLowerCase());
+  return (
+    item.title.toLowerCase().includes(search.value.toLowerCase()) ||
+    item.description.toLowerCase().includes(search.value.toLowerCase())
+  );
 };
 
 const filterByPrice = (product) => {
@@ -166,6 +256,10 @@ const filterByBrand = (product) => {
   return selectedBrands.value.includes(product.brand);
 };
 
+const filterByCategory = (product) => {
+  return selectedCategories.value.includes(product.category);
+};
+
 watch([fromPrice, toPrice], () => {
   if (fromPrice.value <= 0) {
     fromPrice.value = "";
@@ -178,6 +272,10 @@ watch([fromPrice, toPrice], () => {
 
 watch(selectedBrands, () => {
   console.log(selectedBrands);
+});
+
+watch(selectedCategories, () => {
+  console.log(selectedCategories.value);
 });
 
 onMounted(getProducts);
