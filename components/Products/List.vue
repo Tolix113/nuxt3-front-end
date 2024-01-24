@@ -128,12 +128,31 @@
             <h2 class="font-bold text-lg">{{ product.price }} ₽</h2>
           </div>
         </div>
+        <div class="flex flex-row items-center mt-4">
+          <button
+            v-if="page > 1"
+            class="btn btn-green mx-2"
+            @click="page--"
+          >
+            Prev
+          </button>
+          <button
+            v-if="hasNextPage"
+            class="btn btn-green mx-2"
+            @click="page++"
+          >
+            Next
+          </button>
+        </div>
       </div>
     </div>
   </main>
 </template>
 
 <script setup>
+const router = useRouter();
+const route = useRoute();
+let page = ref(1);
 const products = ref([]);
 const search = ref("");
 const fromPrice = ref("");
@@ -141,9 +160,11 @@ const toPrice = ref("");
 const inStock = ref(false);
 const selectedBrands = ref([]);
 const selectedCategories = ref([]);
-const maxRatingForFilter = 4;
 const selectedRating = ref(1);
 
+const maxRatingForFilter = 4;
+const productsPerPage = 2;
+let hasNextPage = null;
 let maxPrice = 0;
 let minPrice = 0;
 
@@ -151,15 +172,22 @@ const categories = ["smartphones"];
 const brands = ["Apple", "Samsung"];
 
 async function getProducts() {
-  const fetchedProducts = await $fetch("/api/products");
-  products.value = fetchedProducts.items || [];
+  const { items: fetchedProducts } = await $fetch("/api/products");
+  products.value = fetchedProducts || [];
   maxPrice = fetchedProducts.maxPrice;
   minPrice = fetchedProducts.minPrice;
   fromPrice.value = minPrice;
   toPrice.value = maxPrice;
 }
 
+function setPages() {
+  page.value = route.query.page ? route.query.page : 1;
+}
+
 const filteredProducts = computed(() => {
+  const start = (page.value - 1) * productsPerPage;
+  const end = page.value * productsPerPage;
+
   let p = products.value;
 
   if (search.value) {
@@ -184,7 +212,8 @@ const filteredProducts = computed(() => {
 
   p = p.filter(filterByRating);
 
-  return p;
+  hasNextPage = p.length > end;
+  return p.slice(start, end);
 });
 
 const filterBySearch = (item) => {
@@ -226,16 +255,10 @@ watch([fromPrice, toPrice], () => {
   }
 });
 
-watch(selectedBrands, () => {
-  console.log(selectedBrands);
+watch(page, () => {
+  router.push({ query: { page: page.value } });
 });
 
-watch(selectedCategories, () => {
-  console.log(selectedCategories.value);
-});
-
-watch(selectedRating, () => {
-  console.log(selectedRating.value);
-});
+onMounted(setPages);
 onMounted(getProducts);
 </script>
