@@ -1,3 +1,4 @@
+---
 meta:
   environment: node
   toolchain:
@@ -6,5 +7,5 @@ meta:
 build:
   additionalCommands: npm run build
 run:
-  command: yarn start
+  command: start
   containerPort: 80
