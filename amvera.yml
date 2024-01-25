@@ -7,3 +7,4 @@ build:
   additionalCommands: npm run build
 run:
   command: yarn start
+  containerPort: 80
