@@ -1,10 +1,8 @@
+---
 meta:
-  environment: node
+  environment: db
   toolchain:
-    name: npm
-    version: 18
-build:
-  additionalCommands: yarn build
-run:
-  command: yarn start
-  containerPort: 80
+    name: mongodb
+    version: 6.0
+build: {}
+run: {}
