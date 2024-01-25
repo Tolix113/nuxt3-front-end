@@ -8,6 +8,7 @@ build:
   artifacts:
     '*': /
 run:
-  scriptName: index.js
+  scriptName: index.mjs
   persistenceMount: /data
   containerPort: 80
+  command: yarn nuxt  build && node /server/index.mjs
