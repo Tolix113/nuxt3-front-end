@@ -10,3 +10,4 @@ build:
 run:
   persistenceMount: /data
   containerPort: 80
+  scriptName: start
