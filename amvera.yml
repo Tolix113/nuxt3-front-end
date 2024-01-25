@@ -10,4 +10,4 @@ build:
 run:
   persistenceMount: /data
   containerPort: 80
-  command: yarn nuxt  build && node /server/index.mjs
+  command: yarn build
