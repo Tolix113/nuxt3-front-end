@@ -7,5 +7,5 @@ meta:
 build:
   additionalCommands: npm run build
 run:
-  command: start
+  command: npm run start
   containerPort: 80
