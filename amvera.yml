@@ -1,0 +1,13 @@
+---
+meta:
+  environment: node
+  toolchain:
+    name: npm
+    version: 18
+build:
+  artifacts:
+    '*': /
+run:
+  scriptName: app.vue
+  persistenceMount: /data
+  containerPort: 80
