@@ -172,10 +172,10 @@ const categories = ["smartphones"];
 const brands = ["Apple", "Samsung"];
 
 async function getProducts() {
-  const { items: fetchedProducts } = await $fetch("/api/products");
-  products.value = fetchedProducts || [];
-  maxPrice = fetchedProducts.maxPrice;
+  const fetchedProducts = await $fetch("/api/products");
+  products.value = fetchedProducts.items || [];
   minPrice = fetchedProducts.minPrice;
+  maxPrice = fetchedProducts.maxPrice;
   fromPrice.value = minPrice;
   toPrice.value = maxPrice;
 }
