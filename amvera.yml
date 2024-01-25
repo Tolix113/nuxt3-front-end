@@ -8,6 +8,6 @@ build:
   artifacts:
     '*': /
 run:
-  scriptName: app.vue
+  scriptName: index.js
   persistenceMount: /data
   containerPort: 80
