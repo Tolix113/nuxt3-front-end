@@ -4,7 +4,7 @@ export default defineEventHandler(async (event) => {
   try {
     const body = await readBody(event);
     const product = await ProductModel.create(body);
-    return { success: true, _id: product._id };
+    return { success: true, id: product._id };
   } catch (error) {
     throw createError({
       statusCode: 500,
