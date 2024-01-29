@@ -6,26 +6,30 @@
         Редактирование товара: {{ product.title }}
       </h1>
       <form @submit="updateProduct">
-        <div
-          v-if="product.thumbnail"
-          class="grid grid-cols-1 m-2"
-        >
-          <img
-            :src="product.thumbnail"
-            class="rounded-lg max-h-64"
-          />
+        <div class="grid grid-cols-1 m-2">
+          <Carousel>
+            <Slide
+              v-for="slide in images.slice().reverse()"
+              :key="slide"
+            >
+              <img :src="slide" />
+            </Slide>
+            <template #addons>
+              <Navigation />
+              <Pagination />
+            </template>
+          </Carousel>
         </div>
         <div class="grid m-2 gap-4 md:grid-cols-2">
           <div>
             <label
-              for="thumbnail"
+              for="thumbnailForUpload"
               class="block mb-2 text-sm font-medium"
               >Превью:</label
             >
             <input
-              id="thumbnail"
+              id="thumbnailForUpload"
               type="file"
-              ref="thumbnail"
               @change="getFile($event)"
               accept="image/*"
               class="block w-full text-sm font-medium bg-gray-100 border border-gray-300 cursor-pointer file:cursor-pointer file:text-white file:border-0 file:py-2.5 file:px-5 file:bg-green-600 rounded-lg"
@@ -33,14 +37,13 @@
           </div>
           <div>
             <label
-              for="images"
+              for="imagesForUpload"
               class="block mb-2 text-sm font-medium"
               >Изображения для слайдера:</label
             >
             <input
-              id="images"
+              id="imagesForUpload"
               type="file"
-              ref="images"
               @change="getFiles($event)"
               accept="image/"
               class="block w-full text-sm font-medium bg-gray-100 border border-gray-300 cursor-pointer file:cursor-pointer file:text-white file:border-0 file:py-2.5 file:px-5 file:bg-green-600 rounded-lg"
@@ -229,9 +232,9 @@ const updateProduct = async (event) => {
   });
 
   if (editedProduct.success) {
-    console.log("Продукт успешно отредактирован...");
+    console.log("Продукт успешно отредактирован!");
     uploadImages(productId);
-    console.log("Изображения успешно обновлены...");
+    console.log("Изображения успешно обновлены!");
   }
 
   // router.back();
