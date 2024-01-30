@@ -25,3 +25,31 @@
 .input:focus {
   @apply ring-2 ring-green-600 outline-none;
 }
+
+.pagination-container {
+  @apply !flex gap-x-2 justify-center items-center;
+}
+
+.pagination-container li {
+  @apply flex-auto block box-border w-10 md:w-12 h-12;
+}
+
+.paginate-buttons {
+  @apply block font-bold text-gray-500 w-full h-full bg-transparent cursor-pointer border-none;
+}
+
+.paginate-buttons:hover {
+  @apply bg-green-200;
+}
+
+.back-button svg {
+  @apply m-auto rotate-180;
+}
+
+.next-button svg {
+  @apply m-auto;
+}
+
+.active-page {
+  @apply border-solid border-b-4 border-green-300;
+}

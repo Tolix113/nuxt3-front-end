@@ -18,6 +18,8 @@
   },
   "dependencies": {
     "mongoose": "^8.1.1",
-    "validator": "^13.11.0"
+    "validator": "^13.11.0",
+    "vue-awesome-paginate": "^1.1.46",
+    "vue3-carousel-nuxt": "^1.1.0"
   }
 }

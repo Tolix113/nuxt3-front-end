@@ -6,7 +6,7 @@
       <form @submit="createProduct">
         <div class="grid grid-cols-1 m-2">
           <img
-            :src="thumbnail"
+            :src="thumbnailPreview"
             class="rounded-lg max-h-64"
           />
         </div>
@@ -154,6 +154,7 @@
 const title = ref("");
 const description = ref("");
 const thumbnail = ref("");
+const thumbnailPreview = ref("");
 const images = ref([]);
 const price = ref(0);
 const stock = ref(0);
@@ -166,6 +167,7 @@ const descriptionError = ref("");
 async function getFile(event) {
   const _file = event.target.files[0];
   thumbnail.value = await _file;
+  thumbnailPreview.value = URL.createObjectURL(thumbnail.value);
 }
 
 async function getFiles(event) {
