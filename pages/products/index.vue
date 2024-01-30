@@ -105,9 +105,9 @@
             :show-breakpoint-buttons="false"
             v-model="currentPage"
           >
-            <template #prev-button
-              ><span
-                ><svg
+            <template #prev-button>
+              <span>
+                <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="#6b7280"
                   width="12"
@@ -115,11 +115,12 @@
                   viewBox="0 0 24 24"
                 >
                   <path d="M8.122 24l-4.122-4 8-8-8-8 4.122-4 11.878 12z" />
-                </svg> </span
-            ></template>
-            <template #next-button
-              ><span
-                ><svg
+                </svg>
+              </span>
+            </template>
+            <template #next-button>
+              <span>
+                <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="#6b7280"
                   width="12"
@@ -127,8 +128,9 @@
                   viewBox="0 0 24 24"
                 >
                   <path d="M8.122 24l-4.122-4 8-8-8-8 4.122-4 11.878 12z" />
-                </svg> </span
-            ></template>
+                </svg>
+              </span>
+            </template>
           </vue-awesome-paginate>
         </div>
       </div>
@@ -137,25 +139,36 @@
 </template>
 
 <script setup>
+import { refDebounced } from "@vueuse/core";
+
 const router = useRouter();
 const route = useRoute();
 const currentPage = ref(1);
+const productsPerPage = 1;
+
 const products = ref([]);
+
+/******Filter fields******/
 const search = ref("");
+const searchDebounced = refDebounced(search, 400);
+
 const fromPrice = ref("");
+const fromPriceDebounced = refDebounced(fromPrice, 400);
+
 const toPrice = ref("");
+const toPriceDebounced = refDebounced(toPrice, 400);
+
 const inStock = ref(false);
 const selectedBrands = ref([]);
 const selectedCategories = ref([]);
 const selectedRating = ref(1);
-
 const maxRatingForFilter = 4;
-const productsPerPage = 1;
 let maxPrice = 0;
 let minPrice = 0;
 
 const categories = ["smartphones"];
 const brands = ["Apple", "Samsung"];
+/*************************/
 
 async function getProducts() {
   const fetchedProducts = await $fetch("/api/products");
@@ -179,26 +192,22 @@ const paginatedProducts = () => {
 const filteredProducts = computed(() => {
   let p = products.value;
 
-  if (search.value) {
+  if (searchDebounced.value) {
     p = p.filter(filterBySearch);
   }
 
-  if (fromPrice.value || toPrice.value) {
+  if (fromPriceDebounced.value || toPriceDebounced.value) {
     p = p.filter(filterByPrice);
   }
-
   if (inStock.value) {
     p = p.filter(filterByStock);
   }
-
   if (selectedBrands.value.length > 0) {
     p = p.filter(filterByBrand);
   }
-
   if (selectedCategories.value.length > 0) {
     p = p.filter(filterByCategory);
   }
-
   p = p.filter(filterByRating);
 
   return p;
@@ -206,14 +215,18 @@ const filteredProducts = computed(() => {
 
 const filterBySearch = (item) => {
   return (
-    item.title.toLowerCase().includes(search.value.toLowerCase()) ||
-    item.description.toLowerCase().includes(search.value.toLowerCase())
+    item.title.toLowerCase().includes(searchDebounced.value.toLowerCase()) ||
+    item.description.toLowerCase().includes(searchDebounced.value.toLowerCase())
   );
 };
 
 const filterByPrice = (product) => {
-  const filterFromPrice = fromPrice.value ? fromPrice.value : minPrice;
-  const filterToPrice = toPrice.value ? toPrice.value : maxPrice;
+  const filterFromPrice = fromPriceDebounced.value
+    ? fromPriceDebounced.value
+    : minPrice;
+  const filterToPrice = toPriceDebounced.value
+    ? toPriceDebounced.value
+    : maxPrice;
   return product.price >= filterFromPrice && product.price <= filterToPrice;
 };
 

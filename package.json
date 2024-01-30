@@ -17,6 +17,7 @@
     "vue-router": "^4.2.5"
   },
   "dependencies": {
+    "@vueuse/core": "^10.7.2",
     "mongoose": "^8.1.1",
     "validator": "^13.11.0",
     "vue-awesome-paginate": "^1.1.46",

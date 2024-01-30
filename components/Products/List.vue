@@ -2,7 +2,7 @@
   <!-- product card -->
   <div
     v-for="product in props.products"
-    class="flex flex-col md:flex-row rounded-lg border shadow-md mt-4 mx-2"
+    class="flex flex-col md:flex-row rounded-lg border shadow-md mt-4 mx-2 p-1"
   >
     <!-- thumbnail -->
     <div class="h-64 md:h-32 w-auto md:w-1/2">
