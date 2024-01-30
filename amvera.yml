@@ -5,7 +5,6 @@ meta:
     name: npm
     version: 18
 build:
-  skip: true
   artifacts:
     '*': /
   additionalCommands: yarn build
