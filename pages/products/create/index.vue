@@ -91,8 +91,9 @@
             <label
               for="brand"
               class="block mb-2 text-sm font-medium"
-              >Товарный бренд:</label
             >
+              Товарный бренд:
+            </label>
             <input
               id="brand"
               type="text"
