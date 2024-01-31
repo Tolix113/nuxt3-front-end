@@ -2,170 +2,176 @@
   <PageHeader />
   <main class="min-h-screen">
     <div class="max-w-5xl mx-auto py-4">
-      <h1 class="text-2xl font-medium m-2">
-        Редактирование товара: {{ product.title }}
-      </h1>
-      <form @submit="updateProduct">
-        <div class="grid grid-cols-1 m-2">
-          <Carousel>
-            <Slide
-              v-for="slide in images.slice().reverse()"
-              :key="slide"
-            >
-              <img :src="slide" />
-            </Slide>
-            <template #addons>
-              <Navigation />
-              <Pagination />
-            </template>
-          </Carousel>
-        </div>
-        <div class="grid m-2 gap-4 md:grid-cols-2">
-          <div>
-            <label
-              for="thumbnailForUpload"
-              class="block mb-2 text-sm font-medium"
-              >Превью:</label
-            >
-            <input
-              id="thumbnailForUpload"
-              type="file"
-              @change="getFile($event)"
-              accept="image/*"
-              class="block w-full text-sm font-medium bg-gray-100 border border-gray-300 cursor-pointer file:cursor-pointer file:text-white file:border-0 file:py-2.5 file:px-5 file:bg-green-600 rounded-lg"
-            />
+      <div v-if="pending">Загрузка...</div>
+      <template v-else>
+        <h1 class="text-2xl font-medium m-2">
+          Редактирование товара: {{ product.value }}
+        </h1>
+        <form @submit="updateProduct">
+          <div
+            class="grid grid-cols-1 m-2"
+            v-if="images.length > 0"
+          >
+            <Carousel :breakpoints="breakpoints">
+              <Slide
+                v-for="slide in images.slice().reverse()"
+                :key="slide"
+              >
+                <img :src="slide" />
+              </Slide>
+              <template #addons>
+                <Navigation />
+                <Pagination />
+              </template>
+            </Carousel>
           </div>
-          <div>
-            <label
-              for="imagesForUpload"
-              class="block mb-2 text-sm font-medium"
-              >Изображения для слайдера:</label
-            >
-            <input
-              id="imagesForUpload"
-              type="file"
-              @change="getFiles($event)"
-              accept="image/"
-              class="block w-full text-sm font-medium bg-gray-100 border border-gray-300 cursor-pointer file:cursor-pointer file:text-white file:border-0 file:py-2.5 file:px-5 file:bg-green-600 rounded-lg"
-              multiple
-            />
+          <div class="grid m-2 gap-4 md:grid-cols-2">
+            <div>
+              <label
+                for="thumbnailForUpload"
+                class="block mb-2 text-sm font-medium"
+                >Превью:</label
+              >
+              <input
+                id="thumbnailForUpload"
+                type="file"
+                @change="getFile($event)"
+                accept="image/*"
+                class="block w-full text-sm font-medium bg-gray-100 border border-gray-300 cursor-pointer file:cursor-pointer file:text-white file:border-0 file:py-2.5 file:px-5 file:bg-green-600 rounded-lg"
+              />
+            </div>
+            <div>
+              <label
+                for="imagesForUpload"
+                class="block mb-2 text-sm font-medium"
+                >Изображения для слайдера:</label
+              >
+              <input
+                id="imagesForUpload"
+                type="file"
+                @change="getFiles($event)"
+                accept="image/"
+                class="block w-full text-sm font-medium bg-gray-100 border border-gray-300 cursor-pointer file:cursor-pointer file:text-white file:border-0 file:py-2.5 file:px-5 file:bg-green-600 rounded-lg"
+                multiple
+              />
+            </div>
+            <div>
+              <label
+                for="title"
+                class="block mb-2 text-sm font-medium"
+                >Заголовок:</label
+              >
+              <input
+                id="title"
+                type="text"
+                v-model="title"
+                placeholder="Введите заголовок товара"
+                class="input"
+                required
+              />
+              <p
+                v-if="titleError"
+                class="mt-2 text-sm font-medium text-red-600"
+              >
+                {{ titleError }}
+              </p>
+            </div>
+            <div>
+              <label
+                for="price"
+                class="block mb-2 text-sm font-medium"
+                >Стоимость товара:
+              </label>
+              <input
+                id="price"
+                type="number"
+                v-model="price"
+                class="input"
+                placeholder="Введите стоимость товара"
+                required
+              />
+            </div>
+            <div>
+              <label
+                for="stock"
+                class="block mb-2 text-sm font-medium"
+                >Остаток товаров на складе:
+              </label>
+              <input
+                id="stock"
+                type="number"
+                v-model="stock"
+                class="input"
+                placeholder="Введите остаток товаров на складе"
+              />
+            </div>
+            <div>
+              <label
+                for="brand"
+                class="block mb-2 text-sm font-medium"
+                >Товарный бренд:</label
+              >
+              <input
+                id="brand"
+                type="text"
+                v-model="brand"
+                class="input"
+                placeholder="Введите бренд товара"
+              />
+            </div>
+            <div>
+              <label
+                for="category"
+                class="block mb-2 text-sm font-medium"
+                >Категория товара:</label
+              >
+              <input
+                id="category"
+                type="text"
+                v-model="category"
+                class="input"
+                placeholder="Введите категорию товара"
+              />
+            </div>
           </div>
-          <div>
+          <div class="grid grid-cols-1 m-2">
             <label
-              for="title"
+              for="description"
               class="block mb-2 text-sm font-medium"
-              >Заголовок:</label
+              >Описание товара:</label
             >
-            <input
-              id="title"
-              type="text"
-              v-model="title"
-              placeholder="Введите заголовок товара"
+            <textarea
+              id="description"
+              v-model="description"
+              placeholder="Введите описание товара"
               class="input"
-              required
-            />
+              rows="5"
+              >{{ description }}</textarea
+            >
             <p
-              v-if="titleError"
+              v-if="descriptionError"
               class="mt-2 text-sm font-medium text-red-600"
             >
-              {{ titleError }}
+              {{ descriptionError }}
             </p>
           </div>
-          <div>
-            <label
-              for="price"
-              class="block mb-2 text-sm font-medium"
-              >Стоимость товара:
-            </label>
-            <input
-              id="price"
-              type="number"
-              v-model="price"
-              class="input"
-              placeholder="Введите стоимость товара"
-              required
-            />
-          </div>
-          <div>
-            <label
-              for="stock"
-              class="block mb-2 text-sm font-medium"
-              >Остаток товаров на складе:
-            </label>
-            <input
-              id="stock"
-              type="number"
-              v-model="stock"
-              class="input"
-              placeholder="Введите остаток товаров на складе"
-            />
-          </div>
-          <div>
-            <label
-              for="brand"
-              class="block mb-2 text-sm font-medium"
-              >Товарный бренд:</label
+          <div class="grid m-2 grid-cols-1 md:grid-cols-2 gap-4">
+            <button
+              type="submit"
+              class="w-auto btn btn-green"
             >
-            <input
-              id="brand"
-              type="text"
-              v-model="brand"
-              class="input"
-              placeholder="Введите бренд товара"
-            />
-          </div>
-          <div>
-            <label
-              for="category"
-              class="block mb-2 text-sm font-medium"
-              >Категория товара:</label
+              Редактировать
+            </button>
+            <button
+              @click="deleteProduct()"
+              type="button"
+              class="w-auto btn btn-green"
             >
-            <input
-              id="category"
-              type="text"
-              v-model="category"
-              class="input"
-              placeholder="Введите категорию товара"
-            />
+              Удалить
+            </button>
           </div>
-        </div>
-        <div class="grid grid-cols-1 m-2">
-          <label
-            for="description"
-            class="block mb-2 text-sm font-medium"
-            >Описание товара:</label
-          >
-          <textarea
-            id="description"
-            v-model="description"
-            placeholder="Введите описание товара"
-            class="input"
-            rows="5"
-            >{{ description }}</textarea
-          >
-          <p
-            v-if="descriptionError"
-            class="mt-2 text-sm font-medium text-red-600"
-          >
-            {{ descriptionError }}
-          </p>
-        </div>
-        <div class="grid m-2 grid-cols-1 md:grid-cols-2 gap-4">
-          <button
-            type="submit"
-            class="w-auto btn btn-green"
-          >
-            Редактировать
-          </button>
-          <button
-            @click="deleteProduct()"
-            type="button"
-            class="w-auto btn btn-green"
-          >
-            Удалить
-          </button>
-        </div>
-      </form>
+        </form>
+      </template>
     </div>
   </main>
 </template>

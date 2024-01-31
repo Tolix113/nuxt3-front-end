@@ -6,17 +6,19 @@
   >
     <!-- thumbnail -->
     <div class="h-64 md:h-32 w-auto md:w-1/2">
-      <a :href="`/products/edit/${product._id}`">
+      <NuxtLink :to="`/products/edit/${product._id}`">
         <img
           :src="product.thumbnail"
           class="inset-0 h-full w-full object-cover object-center"
         />
-      </a>
+      </NuxtLink>
     </div>
     <!-- content -->
     <div class="w-full py-4 px-6 flex flex-col justify-between">
       <h3 class="font-semibold text-lg leading-tight truncate">
-        {{ product.title }}
+        <NuxtLink :to="`/products/${product._id}`">
+          {{ product.title }}
+        </NuxtLink>
       </h3>
       <p>Бренд товара: {{ product.brand }}</p>
       <div class="flex items-center">
