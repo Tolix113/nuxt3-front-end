@@ -98,6 +98,7 @@
         <ProductsList :products="paginatedProducts()" />
         <div
           class="flex max-w-[100vw] justify-center items-center m-2 border border-gray-300 shadow-lg rounded-lg"
+          v-if="filteredProducts.length > 0"
         >
           <vue-awesome-paginate
             :total-items="filteredProducts.length"
@@ -133,6 +134,12 @@
             </template>
           </vue-awesome-paginate>
         </div>
+        <div
+          class="flex justify-center mt-4 border border-gray-300 shadow-lg rounded-lg"
+          v-if="filteredProducts.length === 0"
+        >
+          <p class="p-4 font-semibold text-lg">Товаров не найдено</p>
+        </div>
       </div>
     </div>
   </main>
@@ -144,7 +151,7 @@ import { refDebounced } from "@vueuse/core";
 const router = useRouter();
 const route = useRoute();
 const currentPage = ref(1);
-const productsPerPage = 1;
+const productsPerPage = ref(10);
 
 const products = ref([]);
 
@@ -180,12 +187,21 @@ async function getProducts() {
 }
 
 function setPages() {
+  // productsPerPage.value = +route.query.productsPerPage
+  //   ? +route.query.productsPerPage
+  //   : 10;
   currentPage.value = +route.query.page ? +route.query.page : 1;
+  router.push({
+    query: {
+      page: currentPage.value,
+      // productsPerPage: productsPerPage.value,
+    },
+  });
 }
 
 const paginatedProducts = () => {
-  const start = (currentPage.value - 1) * productsPerPage;
-  const end = currentPage.value * productsPerPage;
+  const start = (currentPage.value - 1) * productsPerPage.value;
+  const end = currentPage.value * productsPerPage.value;
   return filteredProducts.value.slice(start, end);
 };
 
@@ -199,15 +215,19 @@ const filteredProducts = computed(() => {
   if (fromPriceDebounced.value || toPriceDebounced.value) {
     p = p.filter(filterByPrice);
   }
+
   if (inStock.value) {
     p = p.filter(filterByStock);
   }
+
   if (selectedBrands.value.length > 0) {
     p = p.filter(filterByBrand);
   }
+
   if (selectedCategories.value.length > 0) {
     p = p.filter(filterByCategory);
   }
+
   p = p.filter(filterByRating);
 
   return p;
@@ -262,4 +282,8 @@ watch(currentPage, () => {
 
 onMounted(setPages);
 onMounted(getProducts);
+
+useHead({
+  title: "Товары",
+});
 </script>
