@@ -10,5 +10,5 @@ build:
   additionalCommands: yarn build
 run:
   command: yarn start
-  persistenceMount: /data
+  persistenceMount: /public
   containerPort: 80
