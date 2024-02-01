@@ -182,8 +182,6 @@ async function getProducts() {
   products.value = fetchedProducts.items || [];
   minPrice = fetchedProducts.minPrice;
   maxPrice = fetchedProducts.maxPrice;
-  fromPrice.value = minPrice;
-  toPrice.value = maxPrice;
 }
 
 function setPages() {
