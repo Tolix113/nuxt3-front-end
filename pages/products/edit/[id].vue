@@ -177,8 +177,9 @@
 const route = useRoute();
 const router = useRouter();
 
+const productId = route.params.id;
 const { data: product, pending } = await useLazyFetch(
-  `/api/products/${route.params.id}`
+  `/api/products/${productId}`
 );
 
 const title = ref("");
