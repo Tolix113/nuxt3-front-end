@@ -22,7 +22,7 @@
           </Carousel>
           <img
             v-else
-            :src="`/data/no-photo.png`"
+            src="/data/no-photo.png"
           />
         </div>
         <div class="flex flex-col px-4">
