@@ -5,10 +5,10 @@
       <div v-if="pending">Загрузка...</div>
       <div
         v-else
-        class="grid grid-cols-2 m-2"
+        class="grid grid-cols-1 md:grid-cols-2 m-2"
       >
-        <div v-if="images.length > 0">
-          <Carousel>
+        <div>
+          <Carousel v-if="images.length > 0">
             <Slide
               v-for="slide in images.slice().reverse()"
               :key="slide"
@@ -21,7 +21,7 @@
             </template>
           </Carousel>
         </div>
-        <div class="flex flex-col flex-wrap px-4">
+        <div class="flex flex-col px-4">
           <h2 class="text-2xl font-bold mb-2">
             {{ product.title }}
           </h2>
@@ -36,6 +36,20 @@
           <div>
             <span class="font-bold">Описание товара:</span>
             <p class="text-sm mt-1">{{ product.description }}</p>
+          </div>
+          <div class="mt-2">
+            <button
+              class="btn btn-green w-full"
+              v-if="product.stock > 0"
+            >
+              Добавить в корзину
+            </button>
+            <span
+              v-else
+              class="mx-auto btn bg-green-700 text-white"
+            >
+              Товара нет в наличии
+            </span>
           </div>
         </div>
       </div>
