@@ -31,7 +31,19 @@
     <div
       class="w-64 py-4 px-6 flex flex-row items-center justify-start md:justify-center"
     >
-      <h2 class="font-bold text-lg">{{ product.price }} ₽</h2>
+      <div class="flex flex-col">
+        <span class="font-bold text-sm text-right line-through text-gray-600">
+          {{ product.price }}
+        </span>
+        <span class="font-bold text-lg">
+          {{
+            Math.trunc(
+              product.price - (product.price * product.discountPercentage) / 100
+            )
+          }}
+          ₽
+        </span>
+      </div>
     </div>
   </div>
 </template>

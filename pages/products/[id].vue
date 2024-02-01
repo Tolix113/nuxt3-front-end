@@ -5,7 +5,7 @@
       <div v-if="pending">Загрузка...</div>
       <div
         v-else
-        class="grid grid-cols-1 md:grid-cols-2 m-2"
+        class="grid grid-cols-1 sm:grid-cols-2 m-2"
       >
         <div>
           <Carousel v-if="images.length > 0">
@@ -20,6 +20,10 @@
               <Pagination />
             </template>
           </Carousel>
+          <img
+            v-else
+            :src="`/images/no-photo.png`"
+          />
         </div>
         <div class="flex flex-col px-4">
           <h2 class="text-2xl font-bold mb-2">
@@ -30,14 +34,30 @@
             <span class="ml-1">{{ product.brand }}</span>
           </div>
           <div class="mr-4">
+            <div class="flex items-center">
+              <span class="font-bold mr-2">Рейтинг:</span>
+              <Stars :count="Math.floor(product.rating)" />
+              <span class="ml-1">{{ product.rating }}</span>
+            </div>
+          </div>
+          <div class="mr-4">
             <span class="font-bold">Цена:</span>
-            <span class="ml-1">{{ product.price }} Р</span>
+            <span class="ml-1 line-through">{{ product.price }}</span>
+            <span class="ml-1">
+              {{
+                Math.trunc(
+                  product.price -
+                    (product.price * product.discountPercentage) / 100
+                )
+              }}
+              ₽
+            </span>
           </div>
           <div>
             <span class="font-bold">Описание товара:</span>
-            <p class="text-sm mt-1">{{ product.description }}</p>
+            <p class="text-md mt-1">{{ product.description }}</p>
           </div>
-          <div class="mt-2">
+          <div class="mt-6">
             <button
               class="btn btn-green w-full"
               v-if="product.stock > 0"
@@ -68,7 +88,7 @@ const { data: product, pending } = await useLazyFetch(
 watch(
   pending,
   () => {
-    images.value = product.value?.images ? product.value?.images : [];
+    images.value = product.value?.images ?? [];
   },
   {
     deep: true,
