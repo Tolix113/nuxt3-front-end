@@ -1,7 +1,13 @@
 import ProductModel from "~/server/models/Product.model";
 
 export default defineEventHandler(async (event) => {
-  const productId = getRouterParam(event, "id");
-  await ProductModel.findByIdAndDelete(productId);
-  return await ProductModel.find();
+  try {
+    const productId = getRouterParam(event, "id");
+    await ProductModel.findByIdAndDelete(productId);
+    return { success: true };
+  } catch (error) {
+    throw createError({
+      statusCode: 500,
+    });
+  }
 });

@@ -20,9 +20,10 @@
               <Pagination />
             </template>
           </Carousel>
+          <!-- Костыльное no-photo -->
           <img
             v-else
-            src="/data/no-photo.png"
+            src="https://4.downloader.disk.yandex.ru/preview/0da902ec663ea3d302b372e3b5c44fcbf7bb1d7d9b68e65316b82810dcbc2d26/inf/IL7h6oFOmP-EGYmklOGSDlgwNLZ4_jQ6SjaduTCWnXpDOh0ck0yZRBFX6hu19yhFI7_pKgeqgBmof0nWfEEBvA%3D%3D?uid=801339761&filename=no-photo.png&disposition=inline&hash=&limit=0&content_type=image%2Fpng&owner_uid=801339761&tknv=v2&size=1903x919"
           />
         </div>
         <div class="flex flex-col px-4">
@@ -81,14 +82,32 @@
 const route = useRoute();
 const images = ref([]);
 
-const { data: product, pending } = await useLazyFetch(
-  `/api/products/${route.params.id}`
-);
+const {
+  data: product,
+  pending,
+  error,
+} = await useLazyFetch(`/api/products/${route.params.id}`);
 
 watch(
   pending,
   () => {
     images.value = product.value?.images ?? [];
+  },
+  {
+    deep: true,
+    immediate: true,
+  }
+);
+
+watch(
+  error,
+  () => {
+    if (error.value?.statusCode === 404) {
+      throw createError({
+        statusCode: error.value.statusCode,
+        statusMessage: "Товар не найден",
+      });
+    }
   },
   {
     deep: true,

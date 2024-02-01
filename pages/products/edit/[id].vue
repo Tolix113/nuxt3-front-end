@@ -176,11 +176,13 @@
 <script setup>
 const route = useRoute();
 const router = useRouter();
-
 const productId = route.params.id;
-const { data: product, pending } = await useLazyFetch(
-  `/api/products/${productId}`
-);
+
+const {
+  data: product,
+  pending,
+  error,
+} = await useLazyFetch(`/api/products/${productId}`);
 
 const title = ref("");
 let tilteForPreview = "";
@@ -211,6 +213,19 @@ watch(
     brand.value = String(product.value?.brand ?? "Загрузка...");
   },
   { deep: true, immediate: true }
+);
+
+watch(
+  error,
+  () => {
+    if (error.value?.statusCode === 404) {
+      throw createError({
+        statusCode: error.value.statusCode,
+        statusMessage: "Товар не найден",
+      });
+    }
+  },
+  { immediate: true }
 );
 
 const updateProduct = async (event) => {
@@ -283,13 +298,17 @@ async function getFiles(event) {
   imagesForUpload.value = await _files;
 }
 
-const deleteProduct = async (event) => {
+const deleteProduct = async () => {
   if (confirm("Вы действительно хотите удалить этот продукт?")) {
-    await $fetch(`/api/products/delete/${productId}`, {
+    const { success } = await $fetch(`/api/products/delete/${productId}`, {
       method: "DELETE",
     });
-
-    router.back();
+    if (success) {
+      //Удаление файлов из папки public
+      router.back();
+    } else {
+      console.log("Не удалось удалить файл!");
+    }
   }
 
   return;
