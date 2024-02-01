@@ -3,10 +3,13 @@
   <main class="min-h-screen">
     <div class="max-w-5xl mx-auto py-4">
       <h1 class="text-2xl font-medium m-2">
-        Редактирование товара: {{ product.title }}
+        Редактирование товара: {{ tilteForPreview }}
       </h1>
       <form @submit="updateProduct">
-        <div class="grid grid-cols-1 m-2">
+        <div
+          class="grid grid-cols-1 m-2"
+          v-if="images.length > 0"
+        >
           <Carousel>
             <Slide
               v-for="slide in images.slice().reverse()"
@@ -174,12 +177,12 @@
 const route = useRoute();
 const router = useRouter();
 
-const productId = route.params.id;
 const { data: product, pending } = await useLazyFetch(
-  `/api/products/${productId}`
+  `/api/products/${route.params.id}`
 );
 
 const title = ref("");
+let tilteForPreview = "";
 const description = ref("");
 const thumbnail = ref("");
 const images = ref([]);
@@ -196,10 +199,11 @@ const descriptionError = ref("");
 watch(
   pending,
   () => {
+    tilteForPreview = String(product.value?.title ?? "Загрузка...");
     title.value = String(product.value?.title ?? "Загрузка...");
     description.value = String(product.value?.description ?? "Загрузка...");
     thumbnail.value = product.value?.thumbnail ?? "Загрузка...";
-    images.value = product.value?.images ?? "Загрузка...";
+    images.value = product.value?.images ?? [];
     price.value = Number(product.value?.price ?? "Загрузка...");
     stock.value = Number(product.value?.stock ?? "Загрузка...");
     category.value = String(product.value?.category ?? "Загрузка...");
@@ -291,6 +295,6 @@ const deleteProduct = async (event) => {
 };
 
 useHead({
-  title: `Редактирование ${title.value}`,
+  title: `Редактирование ${tilteForPreview}`,
 });
 </script>
