@@ -2,42 +2,9 @@
   <PageHeader />
   <main class="min-h-screen">
     <div class="max-w-5xl mx-auto py-4">
-      <h1 class="text-2xl font-medium m-2">Создание продукта</h1>
+      <h1 class="text-2xl font-medium m-2">Добавление товара</h1>
       <form @submit="createProduct">
-        <div class="grid grid-cols-1 m-2">
-          <img
-            :src="thumbnailPreview"
-            class="rounded-lg max-h-64"
-          />
-        </div>
         <div class="grid m-2 gap-4 md:grid-cols-2">
-          <div>
-            <label
-              for="thumbnail"
-              class="block mb-2 text-sm font-medium"
-              >Превью:</label
-            >
-            <input
-              id="thumbnail"
-              type="file"
-              @change="getFile($event)"
-              class="block w-full text-sm font-medium bg-gray-100 border border-gray-300 cursor-pointer file:cursor-pointer file:text-white file:border-0 file:py-2.5 file:px-5 file:bg-green-600 rounded-lg"
-            />
-          </div>
-          <div>
-            <label
-              for="images"
-              class="block mb-2 text-sm font-medium"
-              >Изображения для слайдера:</label
-            >
-            <input
-              id="images"
-              type="file"
-              @change="getFiles($event)"
-              class="block w-full text-sm font-medium bg-gray-100 border border-gray-300 cursor-pointer file:cursor-pointer file:text-white file:border-0 file:py-2.5 file:px-5 file:bg-green-600 rounded-lg"
-              multiple
-            />
-          </div>
           <div>
             <label
               for="title"
@@ -154,9 +121,6 @@
 <script setup>
 const title = ref("");
 const description = ref("");
-const thumbnail = ref("");
-const thumbnailPreview = ref("");
-const images = ref([]);
 const price = ref(0);
 const stock = ref(0);
 const category = ref("");
@@ -165,39 +129,10 @@ const brand = ref("");
 const titleError = ref("");
 const descriptionError = ref("");
 
-async function getFile(event) {
-  const _file = event.target.files[0];
-  thumbnail.value = await _file;
-  thumbnailPreview.value = URL.createObjectURL(thumbnail.value);
-}
-
-async function getFiles(event) {
-  const _files = event.target.files;
-  images.value = await _files;
-}
-
-async function uploadImages(productId) {
-  if (!thumbnail.value && !images.value) {
-    return;
-  }
-
-  const formData = new FormData();
-  formData.append("thumbnail", thumbnail.value, thumbnail.value.name);
-
-  for (const image of images.value) {
-    formData.append("images", image, image.name);
-  }
-
-  await $fetch(`/api/images/upload/${productId}`, {
-    method: "POST",
-    body: formData,
-  });
-}
-
 async function createProduct(event) {
   event.preventDefault();
 
-  const createdProduct = await $fetch("/api/products/create", {
+  const { success } = await $fetch("/api/products/create", {
     method: "POST",
     body: {
       title: title.value,
@@ -209,8 +144,10 @@ async function createProduct(event) {
     },
   });
 
-  if (createdProduct.success) {
-    uploadImages(createdProduct.id);
+  if (success) {
+    console.log("Товар успешно добавлен.");
+  } else {
+    console.log("Ошибка добавления товара!");
   }
 }
 </script>

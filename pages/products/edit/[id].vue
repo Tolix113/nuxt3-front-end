@@ -26,35 +26,6 @@
         <div class="grid m-2 gap-4 md:grid-cols-2">
           <div>
             <label
-              for="thumbnailForUpload"
-              class="block mb-2 text-sm font-medium"
-              >Превью:</label
-            >
-            <input
-              id="thumbnailForUpload"
-              type="file"
-              @change="getFile($event)"
-              accept="image/*"
-              class="block w-full text-sm font-medium bg-gray-100 border border-gray-300 cursor-pointer file:cursor-pointer file:text-white file:border-0 file:py-2.5 file:px-5 file:bg-green-600 rounded-lg"
-            />
-          </div>
-          <div>
-            <label
-              for="imagesForUpload"
-              class="block mb-2 text-sm font-medium"
-              >Изображения для слайдера:</label
-            >
-            <input
-              id="imagesForUpload"
-              type="file"
-              @change="getFiles($event)"
-              accept="image/"
-              class="block w-full text-sm font-medium bg-gray-100 border border-gray-300 cursor-pointer file:cursor-pointer file:text-white file:border-0 file:py-2.5 file:px-5 file:bg-green-600 rounded-lg"
-              multiple
-            />
-          </div>
-          <div>
-            <label
               for="title"
               class="block mb-2 text-sm font-medium"
               >Заголовок:</label
@@ -189,8 +160,6 @@ let tilteForPreview = "";
 const description = ref("");
 const thumbnail = ref("");
 const images = ref([]);
-const thumbnailForUpload = ref("");
-const imagesForUpload = ref([]);
 const price = ref(0);
 const stock = ref(0);
 const category = ref("");
@@ -231,15 +200,12 @@ watch(
 const updateProduct = async (event) => {
   event.preventDefault();
 
-  //Обработка ошибок
-  // console.log(`Title: ${!!title.value}`);
   if (!title.value.trim())
     return (titleError.value = "Необходимо ввести заголовок товара");
-  // console.log(`Description: ${!!description.value}`);
   if (!description.value.trim())
     return (descriptionError.value = "Необходимо ввести описание товара");
 
-  const editedProduct = await $fetch(`/api/products/edit/${productId}`, {
+  const { success } = await $fetch(`/api/products/edit/${productId}`, {
     method: "PATCH",
     body: {
       title: title.value,
@@ -251,60 +217,17 @@ const updateProduct = async (event) => {
     },
   });
 
-  if (editedProduct.success) {
-    console.log("Продукт успешно отредактирован!");
-    uploadImages(productId);
-    console.log("Изображения успешно обновлены!");
+  if (success) {
+    router.back();
   }
-
-  // router.back();
 };
-
-// *** Вынести в плагин
-async function uploadImages() {
-  if (!thumbnailForUpload.value && !imagesForUpload.value) {
-    return;
-  }
-
-  const formData = new FormData();
-
-  if (thumbnailForUpload.value) {
-    formData.append(
-      "thumbnail",
-      thumbnailForUpload.value,
-      thumbnailForUpload.value.name
-    );
-  }
-
-  if (imagesForUpload.value) {
-    for (const image of imagesForUpload.value) {
-      formData.append("images", image, image.name);
-    }
-  }
-
-  await $fetch(`/api/images/upload/${productId}`, {
-    method: "POST",
-    body: formData,
-  });
-}
-
-async function getFile(event) {
-  const _file = event.target.files[0];
-  thumbnailForUpload.value = await _file;
-}
-
-async function getFiles(event) {
-  const _files = event.target.files;
-  imagesForUpload.value = await _files;
-}
-
 const deleteProduct = async () => {
   if (confirm("Вы действительно хотите удалить этот продукт?")) {
     const { success } = await $fetch(`/api/products/delete/${productId}`, {
       method: "DELETE",
     });
+
     if (success) {
-      //Удаление файлов из папки public
       router.back();
     } else {
       console.log("Не удалось удалить файл!");

@@ -43,15 +43,23 @@
           </div>
           <div class="mr-4">
             <span class="font-bold">Цена:</span>
-            <span class="ml-1 line-through">{{ product.price }}</span>
-            <span class="ml-1">
-              {{
-                Math.trunc(
-                  product.price -
-                    (product.price * product.discountPercentage) / 100
-                )
-              }}
-              ₽
+            <template v-if="product.discountPercentage > 0">
+              <span class="ml-1 line-through">{{ product.price }}</span>
+              <span class="ml-1">
+                {{
+                  Math.trunc(
+                    product.price -
+                      (product.price * product.discountPercentage) / 100
+                  )
+                }}
+                ₽
+              </span>
+            </template>
+            <span
+              v-else
+              class="ml-1"
+            >
+              {{ product.price }} ₽
             </span>
           </div>
           <div>
