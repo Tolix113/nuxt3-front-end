@@ -5,11 +5,10 @@ meta:
     name: npm
     version: 18
 build:
-  skip: false
   artifacts:
     '*': /
   additionalCommands: yarn build
 run:
   command: yarn start
-  persistenceMount: /data
   containerPort: 80
+  persistenceMount: /data
