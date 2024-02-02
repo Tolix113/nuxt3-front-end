@@ -32,9 +32,6 @@ const props = defineProps({
   count: {
     type: Number,
     default: 1,
-    validator: (value) => {
-      return value >= 0 && value <= 4;
-    },
   },
   maxRating: {
     type: Number,
