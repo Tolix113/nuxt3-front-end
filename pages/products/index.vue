@@ -87,10 +87,13 @@
               class="block mr-1"
               type="radio"
               name="rating"
-              :value="i"
+              :value="i - 1"
               v-model="selectedRating"
             />
-            <Stars :count="i" />
+            <Stars
+              :count="i - 1"
+              :max-rating="maxRatingForFilter"
+            />
           </div>
         </div>
       </div>
@@ -168,8 +171,8 @@ const toPriceDebounced = refDebounced(toPrice, 400);
 const inStock = ref(false);
 const selectedBrands = ref([]);
 const selectedCategories = ref([]);
-const selectedRating = ref(1);
-const maxRatingForFilter = 4;
+const selectedRating = ref(0);
+const maxRatingForFilter = 5; //Не включая данное значение
 let maxPrice = 0;
 let minPrice = 0;
 
