@@ -22,7 +22,7 @@
       </h3>
       <p>Бренд товара: {{ product.brand }}</p>
       <div class="flex items-center">
-        <Stars />
+        <Stars :count="Math.trunc(product.rating)" />
         <p class="ms-2 text-sm font-bold text-gray-900">
           {{ product.rating }}
         </p>
