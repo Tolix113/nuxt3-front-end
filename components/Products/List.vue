@@ -32,16 +32,25 @@
       class="w-64 py-4 px-6 flex flex-row items-center justify-start md:justify-center"
     >
       <div class="flex flex-col">
-        <span class="font-bold text-sm text-right line-through text-gray-600">
-          {{ product.price }}
-        </span>
-        <span class="font-bold text-lg">
-          {{
-            Math.trunc(
-              product.price - (product.price * product.discountPercentage) / 100
-            )
-          }}
-          ₽
+        <template v-if="product.discountPercentage > 0">
+          <span class="font-bold text-sm text-right line-through text-gray-600">
+            {{ product.price }}
+          </span>
+          <span class="font-bold text-lg">
+            {{
+              Math.trunc(
+                product.price -
+                  (product.price * product.discountPercentage) / 100
+              )
+            }}
+            ₽
+          </span>
+        </template>
+        <span
+          v-else
+          class="font-bold text-lg"
+        >
+          {{ product.price }} ₽
         </span>
       </div>
     </div>
