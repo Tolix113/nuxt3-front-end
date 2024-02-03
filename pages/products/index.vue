@@ -154,7 +154,7 @@ import { refDebounced } from "@vueuse/core";
 const router = useRouter();
 const route = useRoute();
 const currentPage = ref(1);
-const productsPerPage = ref(3);
+const productsPerPage = ref(10);
 
 const products = ref([]);
 
@@ -184,14 +184,10 @@ async function getProducts() {
 }
 
 function setPages() {
-  // productsPerPage.value = +route.query.productsPerPage
-  //   ? +route.query.productsPerPage
-  //   : 10;
   currentPage.value = +route.query.page ? +route.query.page : 1;
   router.push({
     query: {
       page: currentPage.value,
-      // productsPerPage: productsPerPage.value,
     },
   });
 }
@@ -270,6 +266,12 @@ watch([fromPrice, toPrice], () => {
 
   if (toPrice.value <= 0) {
     toPrice.value = "";
+  }
+});
+
+watch(filteredProducts, () => {
+  if (paginatedProducts().length === 0) {
+    currentPage.value = 1;
   }
 });
 
