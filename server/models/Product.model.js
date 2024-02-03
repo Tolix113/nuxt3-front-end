@@ -35,10 +35,12 @@ export const productSchema = new mongoose.Schema({
   brand: {
     type: String,
     trim: true,
+    default: "без бренда",
   },
   category: {
     type: String,
     trim: true,
+    default: "без категории",
   },
   thumbnail: {
     type: String,

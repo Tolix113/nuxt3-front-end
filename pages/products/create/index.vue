@@ -19,12 +19,6 @@
               class="input"
               required
             />
-            <p
-              v-if="titleError"
-              class="mt-2 text-sm font-medium text-red-600"
-            >
-              {{ titleError }}
-            </p>
           </div>
           <div>
             <label
@@ -38,6 +32,8 @@
               v-model="price"
               class="input"
               placeholder="Введите стоимость товара"
+              min="0"
+              required
             />
           </div>
           <div>
@@ -96,14 +92,9 @@
             placeholder="Введите описание товара"
             class="input"
             rows="5"
+            required
             >{{ description }}</textarea
           >
-          <p
-            v-if="descriptionError"
-            class="mt-2 text-sm font-medium text-red-600"
-          >
-            {{ descriptionError }}
-          </p>
         </div>
         <div class="grid m-2 grid-cols-1 md:grid-cols-2 gap-4">
           <button
@@ -126,17 +117,14 @@ const stock = ref(0);
 const category = ref("");
 const brand = ref("");
 
-const titleError = ref("");
-const descriptionError = ref("");
-
 async function createProduct(event) {
   event.preventDefault();
 
   const { success } = await $fetch("/api/products/create", {
     method: "POST",
     body: {
-      title: title.value,
-      description: description.value,
+      title: title.value.trim(),
+      description: description.value.trim(),
       price: price.value,
       stock: stock.value,
       category: category.value,

@@ -154,17 +154,14 @@ import { refDebounced } from "@vueuse/core";
 const router = useRouter();
 const route = useRoute();
 const currentPage = ref(1);
-const productsPerPage = ref(10);
+const productsPerPage = ref(3);
 
 const products = ref([]);
 
-/******Filter fields******/
 const search = ref("");
 const searchDebounced = refDebounced(search, 400);
-
 const fromPrice = ref("");
 const fromPriceDebounced = refDebounced(fromPrice, 400);
-
 const toPrice = ref("");
 const toPriceDebounced = refDebounced(toPrice, 400);
 
@@ -176,9 +173,8 @@ const maxRatingForFilter = 5; //Не включая данное значени�
 let maxPrice = 0;
 let minPrice = 0;
 
-const categories = ["smartphones"];
+const categories = ["smartphones", "not-smartphones"];
 const brands = ["Apple", "Samsung"];
-/*************************/
 
 async function getProducts() {
   const fetchedProducts = await $fetch("/api/products");
