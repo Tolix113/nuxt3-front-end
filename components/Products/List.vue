@@ -9,7 +9,7 @@
       <NuxtLink :to="`/products/edit/${product._id}`">
         <img
           :src="product.thumbnail"
-          class="inset-0 h-full w-full object-cover object-center"
+          class="inset-0 h-full w-full object-cover"
         />
       </NuxtLink>
     </div>

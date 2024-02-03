@@ -38,12 +38,6 @@
               class="input"
               required
             />
-            <p
-              v-if="titleError"
-              class="mt-2 text-sm font-medium text-red-600"
-            >
-              {{ titleError }}
-            </p>
           </div>
           <div>
             <label
@@ -57,6 +51,7 @@
               v-model="price"
               class="input"
               placeholder="Введите стоимость товара"
+              min="0"
               required
             />
           </div>
@@ -115,14 +110,9 @@
             placeholder="Введите описание товара"
             class="input"
             rows="5"
+            required
             >{{ description }}</textarea
           >
-          <p
-            v-if="descriptionError"
-            class="mt-2 text-sm font-medium text-red-600"
-          >
-            {{ descriptionError }}
-          </p>
         </div>
         <div class="grid m-2 grid-cols-1 md:grid-cols-2 gap-4">
           <button
@@ -165,9 +155,6 @@ const stock = ref(0);
 const category = ref("");
 const brand = ref("");
 
-const titleError = ref("");
-const descriptionError = ref("");
-
 watch(
   pending,
   () => {
@@ -199,11 +186,6 @@ watch(
 
 const updateProduct = async (event) => {
   event.preventDefault();
-
-  if (!title.value.trim())
-    return (titleError.value = "Необходимо ввести заголовок товара");
-  if (!description.value.trim())
-    return (descriptionError.value = "Необходимо ввести описание товара");
 
   const { success } = await $fetch(`/api/products/edit/${productId}`, {
     method: "PATCH",
