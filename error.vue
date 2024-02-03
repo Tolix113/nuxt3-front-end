@@ -1,7 +1,7 @@
 <template>
-  <main class="min-h-screen min-w-screen flex items-center justify-center">
+  <main class="min-h-screen flex items-center justify-center">
     <div
-      class="flex-col items-center p-10 justify-center bg-white border border-gray-300 rounded-lg shadow-lg"
+      class="w-9/12 flex-col items-center p-12 justify-center bg-white border border-gray-300 rounded-lg shadow-lg"
     >
       <p
         class="text-6xl md:text-7xl lg:text-9xl font-bold text-gray-400 text-center"
@@ -9,7 +9,7 @@
         {{ error.statusCode }}
       </p>
       <p
-        class="mt-2 text-2xl md:text-3xl lg:text-4xl text-gray-500 text-center pb-6 border-b-2"
+        class="mt-2 text-2xl md:text-3xl lg:text-4xl text-gray-500 break-words text-center pb-6 border-b-2"
       >
         {{ error.statusMessage }}
       </p>
