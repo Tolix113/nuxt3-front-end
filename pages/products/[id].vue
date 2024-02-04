@@ -20,7 +20,10 @@
               <Pagination />
             </template>
           </Carousel>
-          <img v-else />
+          <img
+            v-else
+            src="/images/no-photo.png"
+          />
         </div>
         <div class="flex flex-col px-4">
           <h2 class="text-2xl font-bold mb-2">
