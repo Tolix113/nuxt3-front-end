@@ -57,13 +57,19 @@
             >
               Товарный бренд:
             </label>
-            <input
+            <select
               id="brand"
-              type="text"
               v-model="brand"
               class="input"
-              placeholder="Введите бренд товара"
-            />
+            >
+              <option
+                v-for="brand in brands"
+                :key="brand"
+                :value="brand"
+              >
+                {{ brand }}
+              </option>
+            </select>
           </div>
           <div>
             <label
@@ -71,13 +77,19 @@
               class="block mb-2 text-sm font-medium"
               >Категория товара:</label
             >
-            <input
+            <select
               id="category"
-              type="text"
               v-model="category"
               class="input"
-              placeholder="Введите категорию товара"
-            />
+            >
+              <option
+                v-for="category in categories"
+                :key="category"
+                :value="category"
+              >
+                {{ category }}
+              </option>
+            </select>
           </div>
         </div>
         <div class="grid grid-cols-1 m-2">
@@ -117,6 +129,10 @@ const stock = ref(0);
 const category = ref("");
 const brand = ref("");
 
+const products = await $fetch("/api/products");
+const categories = new Set(products.items.map((product) => product.category));
+const brands = new Set(products.items.map((product) => product.brand));
+
 async function createProduct(event) {
   event.preventDefault();
 
@@ -133,9 +149,10 @@ async function createProduct(event) {
   });
 
   if (success) {
-    console.log("Товар успешно добавлен.");
+    alert("Товар успешно добавлен");
+    navigateTo("/products");
   } else {
-    console.log("Ошибка добавления товара!");
+    alert("Ошибка добавления товара!");
   }
 }
 </script>
