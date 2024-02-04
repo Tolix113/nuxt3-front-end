@@ -75,13 +75,19 @@
               class="block mb-2 text-sm font-medium"
               >Товарный бренд:</label
             >
-            <input
+            <select
               id="brand"
-              type="text"
               v-model="brand"
               class="input"
-              placeholder="Введите бренд товара"
-            />
+            >
+              <option
+                v-for="brand in brands"
+                :key="brand"
+                :value="brand"
+              >
+                {{ brand }}
+              </option>
+            </select>
           </div>
           <div>
             <label
@@ -89,13 +95,19 @@
               class="block mb-2 text-sm font-medium"
               >Категория товара:</label
             >
-            <input
+            <select
               id="category"
-              type="text"
               v-model="category"
               class="input"
-              placeholder="Введите категорию товара"
-            />
+            >
+              <option
+                v-for="category in categories"
+                :key="category"
+                :value="category"
+              >
+                {{ category }}
+              </option>
+            </select>
           </div>
         </div>
         <div class="grid grid-cols-1 m-2">
@@ -155,6 +167,10 @@ const stock = ref(0);
 const category = ref("");
 const brand = ref("");
 
+const products = await $fetch("/api/products");
+const categories = new Set(products.items.map((product) => product.category));
+const brands = new Set(products.items.map((product) => product.brand));
+
 watch(
   pending,
   () => {
@@ -200,19 +216,21 @@ const updateProduct = async (event) => {
   });
 
   if (success) {
+    alert("Товар успешно отредактирован");
     router.back();
   }
 };
 const deleteProduct = async () => {
-  if (confirm("Вы действительно хотите удалить этот продукт?")) {
+  if (confirm("Вы действительно хотите удалить этот товар?")) {
     const { success } = await $fetch(`/api/products/delete/${productId}`, {
       method: "DELETE",
     });
 
     if (success) {
+      alert("Товар удален");
       router.back();
     } else {
-      console.log("Не удалось удалить файл!");
+      console.log("Не удалось удалить данный товар");
     }
   }
 

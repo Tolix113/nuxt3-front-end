@@ -20,10 +20,9 @@
               <Pagination />
             </template>
           </Carousel>
-          <!-- Костыльное no-photo -->
           <img
             v-else
-            src="https://4.downloader.disk.yandex.ru/preview/0da902ec663ea3d302b372e3b5c44fcbf7bb1d7d9b68e65316b82810dcbc2d26/inf/IL7h6oFOmP-EGYmklOGSDlgwNLZ4_jQ6SjaduTCWnXpDOh0ck0yZRBFX6hu19yhFI7_pKgeqgBmof0nWfEEBvA%3D%3D?uid=801339761&filename=no-photo.png&disposition=inline&hash=&limit=0&content_type=image%2Fpng&owner_uid=801339761&tknv=v2&size=1903x919"
+            src="/images/no-photo.png"
           />
         </div>
         <div class="flex flex-col px-4">

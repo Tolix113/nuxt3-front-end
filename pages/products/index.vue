@@ -166,21 +166,22 @@ const toPrice = ref("");
 const toPriceDebounced = refDebounced(toPrice, 400);
 
 const inStock = ref(false);
+const brands = ref([]);
 const selectedBrands = ref([]);
+const categories = ref([]);
 const selectedCategories = ref([]);
 const selectedRating = ref(0);
-const maxRatingForFilter = 5; //Не включая данное значение
+const maxRatingForFilter = 5;
 let maxPrice = 0;
 let minPrice = 0;
-
-const categories = ["smartphones", "not-smartphones"];
-const brands = ["Apple", "Samsung"];
 
 async function getProducts() {
   const fetchedProducts = await $fetch("/api/products");
   products.value = fetchedProducts.items || [];
-  minPrice = fetchedProducts.minPrice;
-  maxPrice = fetchedProducts.maxPrice;
+  categories.value = new Set(products.value.map((product) => product.category));
+  brands.value = new Set(products.value.map((product) => product.brand));
+  minPrice = fetchedProducts.minPrice || 0;
+  maxPrice = fetchedProducts.maxPrice || 0;
 }
 
 function setPages() {
