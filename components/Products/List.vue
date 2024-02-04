@@ -16,7 +16,10 @@
     <!-- content -->
     <div class="w-full py-4 px-6 flex flex-col justify-between">
       <h3 class="font-semibold text-lg leading-tight truncate">
-        <NuxtLink :to="`/products/${product._id}`">
+        <NuxtLink
+          :to="`/products/${product._id}`"
+          class="hover:text-green-500"
+        >
           {{ product.title }}
         </NuxtLink>
       </h3>

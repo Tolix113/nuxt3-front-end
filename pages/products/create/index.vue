@@ -145,6 +145,12 @@ async function createProduct(event) {
       stock: stock.value,
       category: category.value,
       brand: brand.value,
+      thumbnail: "http://via.placeholder.com/640x360",
+      images: [
+        "http://via.placeholder.com/640x360",
+        "http://via.placeholder.com/640x360",
+        "http://via.placeholder.com/640x360",
+      ],
     },
   });
 
